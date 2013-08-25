@@ -1,0 +1,163 @@
+LIMMER EXAMPLE COMMAND LINES
+=============================
+
+
+1.  Simple examples
+
+
+
+1.1  Compute layout of CSV file 'foo.csv' and save to 'output.csv'
+
+gltest -p sources\gpusources -i foo.csv -o output.csv
+
+1.2  Compute layout of VEC file 'foo.vec' with 8 nonzero entries in the most dense point and save to 'output.csv'
+
+gltest -p sources\gpusources -X foo.csv -x 8 -o output.csv
+
+1.3  Compute full normalized stress of final layout of CSV file 'foo.csv'
+
+gltest -p sources\gpusources -i foo.csv -l
+
+it is the last number in the line written to standard out.
+
+1.4  Compute layout of CSV file 'foo.csv' with initial configuration 'init.csv'.
+
+gltest -p sources\gpusources -i foo.csv -I init.csv
+
+1.5  Compute a layout of a CSV file 'foo.csv' and export the final screen to 'foo.ppm'.
+
+gltest -p sources\gpusources -i foo.csv -P foo.ppm
+
+1.6  Compute a movie of a layout of 'foo.csv' with timings.
+
+First generate the timings with the following line
+
+gltest -p sources\gpusources -i foo.csv -f data.txt
+
+Then extract the second column with 'cut' into timings.txt.  Then run
+
+gltest -p sources\gpusources -i foo.csv -H timings.txt -Z movie_
+
+which will make the frames for each of the iterations as movie_###.ppm.
+
+1.7  Compute a layout of a CSV file 'foo.csv' and don't draw the output.
+
+gltest -p sources\gpusources -i foo.csv -o output.csv -D
+
+1.8  Compute a layout of the grid demo dataset with 10000 points
+
+gltest -p sources\gpusources -n 10000
+
+1.9  Compute a layout of the grid demo dataset with 10000 points and 1% noise.
+
+gltest -p sources\gpusources -n 10000 -N 0.01
+
+1.10  Only use a percentage (e.g. 50% ) of the input data 'foo.csv'.
+
+gltest -p sources\gpusources -i foo.csv -C 50
+
+
+
+2.  Reproducing figures and timings from the paper
+
+
+2.1 Datasets
+
+	1.  Grid dataset (built into the program see 1.8)
+	2.  Shuttle Dataset attached as shuttle_trn_corr.csv
+	3.  Docs dataset attached as amsouth8filter.vec
+	4.  Cancer dataset attached breast-cancer-wisconsin.csv 
+	5.  Swiss roll dataset (built into the program).
+	6.  Shuttle class matrix attached as shuttle_trn_class.mat
+	7.  Cancer class matrix attached as breast-cancer-wisconsin-class.mat
+	8.  document class matrix amsouth8filter.maxclass.txt
+
+2.2 Generating figures from the paper (DOS BATCH SCRIPTS)
+
+2.2.1  Figure 2
+
+The following generates two files one for gpusf and one for glimmer.  Plot the timing columns in excel to generate the graph.
+
+for /l %%i in (10,10,1000) do gltest -p sources\gpusources -c 0 -S -D -n %%i -l >> gpusf_grid_timing_stress.txt
+for /l %%i in (1100,100,5000) do gltest -p sources\gpusources -c 0 -S -D -n %%i -l >> gpusf_grid_timing_stress.txt
+for /l %%i in (5500,500,10000) do gltest -p sources\gpusources -c 0 -S -D -n %%i -l >> gpusf_grid_timing_stress.txt
+for /l %%i in (11000,1000,40000) do gltest -p sources\gpusources -c 0 -S -D -n %%i -l >> gpusf_grid_timing_stress.txt
+for /l %%i in (10,10,1000) do gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -n %%i -l >> glimmer_grid_timing_stress.txt
+for /l %%i in (1100,100,5000) do gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -n %%i -l >> glimmer_grid_timing_stress.txt
+for /l %%i in (5500,500,10000) do gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -n %%i -l >> glimmer_grid_timing_stress.txt
+for /l %%i in (11000,1000,40000) do gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -n %%i -l >> glimmer_grid_timing_stress.txt
+
+2.2.2  Figure 4
+
+The following generates two ppm images, one for gpusf and one for glimmer.  If you don't get the same results, try a different random seed or one based on the timer, you'll very likely run into a twisted manifold with 8000 points.
+
+gltest -p sources\gpusources -c 0 -S -D -n 8000 -P gpusf_twisted.ppm
+gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -n 8000 -P glimmer_untwisted.ppm
+
+2.2.3  Figure 5
+
+The following will generate a file 'filtered.txt' where you plot the 3rd and 4th column.  Generating the green line will require extra coding.  Uncomment the line "//g_stresses.push_back( calc_stress( tier ) );" from the glimmer() function in gltest.cpp, rerun the line below and append the 3rd column to the original filtered.txt file and plot it with the other columns.
+
+gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -n 8000 -f filtered.txt
+
+2.2.4  Figure 8
+
+Use these lines to generate the top 4 images in the table of figures.  Differences may arise due to different initial configurations.
+
+2.2.4.1  cancer
+
+gltest -p sources\gpusources -w 1000 -b 4 -i breast-cancer-wisconsin.csv -A breast-cancer-wisconsin-class.mat -P cancer_glimmer.ppm
+
+2.2.4.2  grid
+
+gltest -p sources\gpusources -w 1000 -b 2 -n 10000 -P grid_glimmer.ppm
+
+2.2.4.3  shuttle_big
+
+gltest -p sources\gpusources -w 1000 -b 2 -i  shuttle_trn_corr.csv -A shuttle_trn_class.mat -P shuttle_glimmer.ppm
+
+2.2.4.4  docs
+
+gltest -p sources\gpusources -w 1000 -b 2 -x 8 -X amsouth8filter.vec -A amsouth8filter.maxclass.txt -P docs_glimmer.ppm
+
+2.2.5  Figure 9
+
+The timings for glimmer GPU are generated with the following scripts.  First the shuttle and docs datasets are parsed into percentages using the -C and -r options.  This is not detailed below.  Then the following scripts are run of which we plot the run-time milliseconds column.
+
+2.2.5.1 shuttle
+
+for /l %%i in (10,10,230) do gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -i shuttle_big\shuttle_trn_corr_%%i.csv -l >> shuttle_timing_stress.txt
+for /l %%i in (240,10,400) do gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -i shuttle_big\shuttle_trn_corr_%%i.csv -l >> shuttle_timing_stress.txt
+for /l %%i in (240,10,1000) do gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -i shuttle_big\shuttle_trn_corr_%%i.csv >> shuttle_timing_stress.txt
+
+2.2.5.2 grid
+
+for /l %%i in (10,10,1000) do gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -n %%i -l >> grid_timing_stress.txt
+for /l %%i in (1100,100,5000) do gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -n %%i -l >> grid_timing_stress.txt
+for /l %%i in (5500,500,10000) do gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -n %%i -l >> grid_timing_stress.txt
+for /l %%i in (11000,1000,40000) do gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -n %%i -l >> final_grid_timing_stress.txt
+for /l %%i in (11000,1000,50000) do gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -n %%i >> grid_timing_stress.txt
+for /l %%i in (55000,5000,100000) do gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -n %%i >> grid_timing_stress.txt
+for /l %%i in (110000,10000,200000) do gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -n %%i >> grid_timing_stress.txt
+
+2.2.5.3 docs
+
+for /l %%i in (10,10,360) do gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -x 8 -X docs\amsouth8filter%%i.vec -l >> docs_timing_stress.txt
+for /l %%i in (370,10,1000) do gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -x 8 -X docs\amsouth8filter%%i.vec -l >> docs_timing_stress.txt
+
+2.2.5.4 cancer
+
+gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -i breast-cancer-wisconsin.csv -l >> cancer.txt
+
+2.2.5.5 grid1Knoise
+
+gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -n 1000 -N 0.01 -l >> gridnoise.txt
+
+2.2.5.6 swissroll
+
+gltest -p sources\gpusources -Y -y 1000 -F 8 -S -D -n 1000 -K -l >> swissroll.txt
+
+2.2.6  Figure 11
+
+Run the following script on a machine with a 7900GS and a machine with a 8800GTX and plot the run-time milliseconds columns.
+
