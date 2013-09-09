@@ -70,8 +70,8 @@ int myrand( ) {
 	unsigned int n = (unsigned int)rand();
 	unsigned int m = (unsigned int)rand();
 
-	return ((int)((n << 16) + m));
-
+	// Previously not wrapped with abs() - overflow was generating negatives that interfered with logic elsewhere
+	return std::abs(((int)((n << 16) + m)));
 }
 
 /*
@@ -417,7 +417,7 @@ void initRand( Tier *tier )  {
 		g_feeder.P[i] = g_feeder.P[ i % tier->n_points ];
 	}
 
-	 // properly size the random texture
+	// properly size the random texture
 
 	tier->t_rand->width  = (int) ceil(sqrt((double)(Plimit / 4)));
 	tier->t_rand->height = (int) ceil(sqrt((double)(Plimit / 4)));

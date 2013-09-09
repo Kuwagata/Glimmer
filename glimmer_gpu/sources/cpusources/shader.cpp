@@ -29,7 +29,9 @@ char *readShaderSource( const char *filename ) {
 	char *source = (char *) malloc( sizeof( char ) * (stringsize + 1) );
 
 	// reopen and read in the file
-	fopen( filename, "r" );
+	if( (fp = fopen( filename, "r" )) == NULL ) {
+		printf( " ERROR: cannot open shader source file \"%s\".  Quitting.\n", filename );
+	}
 	int i = 0;
 	for( i = 0; i < stringsize; i++ ) {
 		source[i]=fgetc(fp);

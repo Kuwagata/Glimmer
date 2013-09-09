@@ -376,10 +376,10 @@ void setup_sh_dist( ) {
 void interpolate_points( Texture *texture, Tier *tier ) {
 
 	glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
+	glLoadIdentity();
 	gluOrtho2D(0.0,texture->tier_width[tier->level],0.0,texture->tier_height[tier->level]);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 	glViewport(0,0,texture->tier_width[tier->level],texture->tier_height[tier->level]);
 
 	// first copy over the old pixels
@@ -721,6 +721,7 @@ void calc_dot_product( Tier *tier ) {
 
 	// make quad filled to hit every pixel/texel
 	glDrawBuffer (attachmentpoints[tier->t_diff->attach_idx]);
+
 	glPolygonMode(GL_FRONT,GL_FILL);
 
 	// and render quad

@@ -1923,7 +1923,7 @@ void initGL(int argc, char **argv) {
 	glutInit ( &argc, argv );
 	glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB );
 	glutInitWindowSize(n_w,n_h);
-    glutCreateWindow("MDSGPU");  
+	glutCreateWindow("MDSGPU");  
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
 	glutMouseFunc( mouseCallback );
@@ -2206,8 +2206,8 @@ void proc_command_args( int argc, char **argv ) {
 					break;
 				case 'p':
 					sprintf(g_shader_path, "%s", argv[i+1] );
-					if( g_shader_path[strlen(g_shader_path)-1] != '\\' ) {
-						sprintf(g_shader_path, "%s\\", argv[i+1] );
+					if( g_shader_path[strlen(g_shader_path)-1] != '/' ) {
+						sprintf(g_shader_path, "%s/", argv[i+1] );
 					}
 					break;
 				case 'c':

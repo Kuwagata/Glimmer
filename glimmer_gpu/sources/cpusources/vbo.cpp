@@ -23,41 +23,41 @@ extern int n_smax;
 	table of distinguishable Tableau colors
 */
 float tableau[10][3] =	{	{37,	139,	193},	// blue
-							{254,	151,	41},	// orange
-							{50,	171,	90},	// green
-							{223,	61,		51},	// red
-							{166,	127,	190},	// purple
-							{157,	106,	94},	// brown
-							{232,	151,	199},	// pink
-							{145,	144,	144},	// grey
-							{199,	197,	43},	// gold
-							{5,		199,	215}	// teal
-						};
+				{254,	151,	 41},	// orange
+				{50,	171,	 90},	// green
+				{223,	 61,	 51},	// red
+				{166,	127,	190},	// purple
+				{157,	106,	 94},	// brown
+				{232,	151,	199},	// pink
+				{145,	144,	144},	// grey
+				{199,	197,	 43},	// gold
+				{5,	199,	215}	// teal
+			};
 
 /* 
 	table of diverging color-brewer colors
 */
-float color_brewer_diverging[8][3]=	{	{230,	97,		1},		// orange
-										{94,	60,		153},	// purple
-										{166,	97,		26},	// brown
-										{0,		136,	55},	// green
-										{208,	28,		139},	// pink
-										{202,	0,		32},	// red
-										{5,		113,	176},	// blue
-										{64,	64,		64}		// gray
-									};
+float color_brewer_diverging[8][3]=	{	{230,	 97,	  1},	// orange
+						{94,	 60,	153},	// purple
+						{166,	 97,	 26},	// brown
+						{0,	136,	 55},	// green
+						{208,	 28,	139},	// pink
+						{202,	  0,	 32},	// red
+						{5,	113,	176},	// blue
+						{64,	 64,	 64}	// gray
+					};
 
 /* 
 	table of diverging color-brewer colors
 */
-float primary_colors[7][3]=	{	{255,	0,		0},		// red
-								{0,		0,		255},	// blue
-								{0,		200,	30},	// green
-								{255,	0,		255},	// magenta
-								{0,		0,		0},		// black
-								{128,	128,	128},	// grey
-								{170,	150,	70},		// "brown"
-							};
+float primary_colors[7][3]=	{	{255,	  0,	  0},	// red
+					{0,	  0,	255},	// blue
+					{0,	200,	 30},	// green
+					{255,	  0,	255},	// magenta
+					{0,	  0,	  0},	// black
+					{128,	128,	128},	// grey
+					{170,	150,	 70},	// "brown"
+				};
 
 /*
 	Setup vertex buffers
